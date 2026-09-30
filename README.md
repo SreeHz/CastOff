@@ -485,5 +485,5 @@ Contributions, pull requests, and device compatibility reports are warmly welcom
 ---
 
 <div align="center">
-  <sub>CastOff is free and open-source software under the MIT License. Built with curiosity and passion by Sree Raswanth V S. May your casts be long and your displays stay cold. 📺❄️</sub>
+  <sub>My Ideaology: You didn't pay just for a Software Update, you did pay for the Hardware too... Use Effectively. 📺❄️</sub>
 </div>
