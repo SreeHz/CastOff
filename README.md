@@ -479,11 +479,13 @@ Contributions, pull requests, and device compatibility reports are warmly welcom
 ## 🤝 Credits & Author
 
 - **Author**: **Sree Raswanth V S** ([@SreeHz](https://github.com/SreeHz))
+- **[Initial Prototype & Blog Post](https://blog.raswanth.workers.dev/blog/castoff-nap-while-casts)**: The very first version was vibecoded with Claude.
+- **CastOff v1.0 Production Release**: Vibecoded with **Gemini 3.8 Flash [high effort]**.
 - **[scrcpy](https://github.com/Genymobile/scrcpy)** by Romain Vimont (`@rom1v`): Foundational inspiration for the `setDisplayPowerMode` and `DisplayControl` reflection mechanisms.
 - **Motorola Moto G57 Power**: The testbed device running Android 16 (Baklava) with Magisk that endured countless display blanking experiments.
 
 ---
 
 <div align="center">
-  <sub>My Ideaology: You didn't pay just for a Software Update, you did pay for the Hardware too... Use Effectively. 📺❄️</sub>
+  <sub>💡 <b>My Ideology:</b> <i>"You didn't pay just for a Software Update, you did pay for the Hardware too... Use Effectively."</i><br/>(My main and never-changed ideology of life since my college first year) 📺❄️</sub>
 </div>
