@@ -1,0 +1,74 @@
+📺🔌 CastOff: Teaching My Poor Moto to Nap While It Casts
+Or: "How I Spent an Evening Reinventing a Samsung Feature Because I Refuse to Buy a Samsung"
+
+🎬 The Setup
+Picture it: you're casting a whole-screen mirror to your TV. Life is good. Spider-Man is swinging. Venom is oozing. And then you press the power button because, you know, you'd like your phone screen to NOT burn a permanent "Ultimate Spider-Man S1E4" logo into the panel…
+
+…and the cast dies. 💀
+
+Samsung phones have this slick "SmartConnect" thing where the screen dims into a cute little ambient standby with a clock and playback controls, the panel goes dark, and the TV keeps playing like nothing happened. I looked at that feature, said "I want it, but on a rooted Moto G57 Power running LineageOS on Android 16, and I want it for free, and I want it tonight."
+
+Reasonable. Totally reasonable. 🙃
+
+🧠 The Big Brain Realization (that ruined my life for 20 minutes)
+Here's the plot twist nobody tells you: whole-screen mirroring is a photocopier, not a projector. Whatever the phone composes, the TV shows. Frame for frame. Pixel for pixel.
+
+So my dream of "a pretty ambient clock on the phone while the TV keeps playing the movie"? Physically impossible with mirroring. If I draw a clock on the phone, congratulations — the TV now shows a clock too. 🕐📺🕐 Samsung cheats by doing app-level casting (the TV plays independently), which is a completely different circus.
+
+The achievable dream, though: turn the phone's physical panel OFF while the compositor keeps compositing, so the TV keeps getting frames and the phone is just… a dark, cold, power-saving brick. Which, honestly, is the 90% everyone actually wants. 🎯
+
+Turns out scrcpy already solved half of this with its mod+o trick. Standing on the shoulders of giants, as they say. (The other half I got to build myself, as they don't say.)
+
+🔧 The Secret Sauce: setDisplayPowerMode
+The magic incantation is SurfaceControl.setDisplayPowerMode(token, 0). It reaches past Android's PowerManager and pokes SurfaceFlinger directly on the shoulder:
+
+"Hey, kill the backlight." "But is the screen off?" "No no, the screen is totally on. Just… don't render any photons." "…Okay boss." 🤷
+
+Because PowerManager still thinks the screen is happily awake, the compositor keeps composing, the cast keeps casting, and the panel sits there dark and smug. I proved it by taking a screenshot while the panel was off and getting back a full 2 MB frame of glorious content. Schrödinger's screen: simultaneously off and rendering. 🐈📦
+
+The one gotcha on Android 14+: the display token moved houses to com.android.server.display.DisplayControl, which you have to summon from SYSTEMSERVERCLASSPATH with a classloader ritual that looks suspiciously like a summoning circle. 🪄 Copied that homework directly from scrcpy. Thanks, scrcpy. You're the real MVP.
+
+🧱 The Build (now with 100% more root)
+No Play Store, no nonsense. Just a Quick Settings tile and some tastefully applied root:
+
+🔋 castoff.jar — a ~2 KB dex helper that flips the panel on/off. Runs via app_process as root. Small but mighty. The chihuahua of binaries.
+🎛️ The QS Tile ("Cast Screen Off") — tap it while casting, and it:
+Collapses the notification shade (more on this drama later 🍿)
+Throws up a transparent, touch-eating overlay so your face/pocket/cat can't accidentally pause the movie by mashing the dark screen 🐾
+Grabs a wakelock so the phone doesn't actually fall asleep and ruin everything
+Blanks the panel. Curtain down. 🎭
+🔊 The exit gesture — since I didn't hijack the power button (that's a whole LSPosed saga for another day), you wake it back up with a double Volume-Up. A tiny root getevent listener watches for it. Read-only, non-invasive, minds its own business — the polite houseguest of input listeners.
+🎭 The Power Button Caveat (read this or suffer)
+⚠️ Do NOT press the power button while dark-casting. ⚠️
+
+It routes straight to PowerManager, which will gleefully put the phone to actual sleep and drop the cast — the exact bug we were trying to murder. It's like installing a fire alarm and then keeping a "PULL TO START FIRE" lever right next to it. Use double-Volume-Up instead. (A future LSPosed module could tame the power button properly. Future Me's problem. 👋)
+
+🍿 The "One Last Bug" Special
+Everything worked. I was ready to take a victory lap. Then:
+
+User: "the notification bar which I swiped down is not automatically closing, causing hide the playing video with the panel."
+
+Ah yes. The classic. You pull down Quick Settings to reach the tile, the tile blanks the panel… but the shade you just opened is still sitting there, composited proudly over the video, now frozen and beamed to your TV in all its glory. 📲➡️📺 A screenshot of a menu, playing on your 70-inch. Cinema.
+
+The fix? One line of root: cmd statusbar collapse, plus a 450 ms pause so the collapse animation finishes before the lights go out. Because nothing says "professional software" like a well-timed Thread.sleep(). 😌💤
+
+Verified it by capturing what the TV would see: video playing, shade gone, dignity restored. ✅
+
+📊 Final Scorecard
+Thing	Status
+Panel goes dark 🌚	✅
+Cast survives (composition proven) 📡	✅
+Stray touches blocked 🚫👆	✅
+Double-Vol-Up wakes it 🔊🔊	✅
+Notification shade behaves 🙈	✅ (eventually)
+Power button behaves 🔘	❌ (it's on the naughty list)
+Actual TV validation 🖥️	✅✅✅
+Samsung's R&D budget 💸	Untouched
+🏁 Conclusion
+I built a Samsung feature for the price of a couple hours and my remaining sanity, entirely out of root access, reflection, and spite. The phone now casts to the TV, goes dark to save its little OLED soul, and wakes up on command — all without dropping the stream.
+
+Is it hacky? Absolutely. Does it spawn a getevent process and pkill its way out? You bet. Would a Samsung engineer faint? Probably. But it's mine, it's free, and it works. 🎉
+
+Now if you'll excuse me, I have an Ultimate Spider-Man episode to finish. In the dark. On the big screen. Like a civilized person. 🕷️📺✨
+
+Built on a Moto G57 Power (Android 16 / LineageOS, Magisk 30.7). No Samsungs were purchased in the making of this project. 🛠️

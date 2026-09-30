@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">CastOff</string>
+    <string name="tile_label">Cast Screen Off</string>
+    <string name="tile_active">Display Blanked</string>
+    <string name="tile_inactive">Display Normal</string>
+    <string name="desc_title">Screen-Off Casting</string>
+    <string name="desc_content">Turn off your phone display while casting to your TV without dropping the stream. Save battery and prevent OLED burn-in.</string>
+    <string name="btn_test">Test Screen Blank (5s)</string>
+    <string name="btn_toggle">Toggle Blank Now</string>
+    <string name="info_instructions">Instructions:\n\n• Tap the "Cast Screen Off" tile in Quick Settings to blank display while casting.\n• Double-press Volume Up anytime to wake the screen.\n• ⚠️ Avoid pressing the physical Power button while blanked to prevent putting the phone to sleep.</string>
+</resources>

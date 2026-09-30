@@ -1,0 +1,34 @@
+# Build output and intermediate artifacts
+build/
+bin/
+gen/
+out/
+*.class
+*.dex
+*.idsig
+*.apk.idsig
+*.tmp
+*.log
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.gradle/
+.project
+.classpath
+.settings/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# Keep release assets and magisk module
+!cast_off_magisk.zip
+!magisk_module/
+!magisk_module/**

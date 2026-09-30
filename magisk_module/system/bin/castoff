@@ -1,0 +1,8 @@
+#!/system/bin/sh
+# CastOff CLI Launcher
+BASEDIR="/system/framework"
+if [ ! -f "$BASEDIR/castoff.jar" ]; then
+    BASEDIR="/data/local/tmp"
+fi
+export CLASSPATH="$BASEDIR/castoff.jar"
+exec app_process /system/bin com.castoff.CastOffCli "$@"
