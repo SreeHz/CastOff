@@ -2,5 +2,5 @@ id=cast_off
 name=CastOff (Screen Blanking for Casting)
 version=v1.0
 versionCode=100
-author=Raswanth
+author=Sree Raswanth V S
 description=Keep screen mirroring/casting active while turning off physical display to save battery and prevent OLED burn-in. Wakes up on double Volume-Up. Fully compatible with Android 16 (Baklava).

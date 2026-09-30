@@ -29,7 +29,8 @@
 - [🌐 Device & OEM Compatibility](#-device--oem-compatibility)
 - [🔬 Under The Hood: Code Highlights](#-under-the-hood-code-highlights)
 - [🏆 Scorecard](#-scorecard)
-- [🤝 Credits & Acknowledgments](#-credits--acknowledgments)
+- [🐛 Issues, Device Reports & Feedback](#-issues-device-reports--feedback)
+- [🤝 Credits & Author](#-credits--author)
 
 ---
 
@@ -287,13 +288,27 @@ cast_off/
 
 ## 📱 Companion App & Quick Settings Tile
 
-While power users can trigger CastOff from the terminal, most users interact with it via the integrated **Quick Settings Tile**:
+While power users can trigger CastOff from the terminal, most users interact with it via the companion app and integrated **Quick Settings Tile**:
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/google/material-design-icons/master/png/device/cast_connected/materialicons/48dp/2x/baseline_cast_connected_black_48dp.png" width="80" alt="CastOff Tile" />
-  <br/>
-  <b>Quick Settings: "Cast Screen Off"</b>
-  <p><i>One tap blanks the panel and starts casting in the dark.</i></p>
+  <table>
+    <tr>
+      <th align="center">📱 App Dashboard</th>
+      <th align="center">🎛️ Quick Settings Tile</th>
+    </tr>
+    <tr>
+      <td align="center">
+        <img src="assets/app_interface.png" width="300" alt="CastOff App Interface" />
+        <br/>
+        <sub><b>CastOff Dashboard</b> with status monitor, toggle & 5s test blank</sub>
+      </td>
+      <td align="center">
+        <img src="assets/qs_tile.png" width="300" alt="Quick Settings Tile" />
+        <br/>
+        <sub><b>"Cast Screen Off" Tile</b> seamlessly integrated into the shade</sub>
+      </td>
+    </tr>
+  </table>
 </div>
 
 ### App Features:
@@ -444,29 +459,31 @@ while (fis.read(buf) == 24) {
 
 ---
 
-## 🏆 Scorecard
+## 🐛 Issues, Device Reports & Feedback
 
-| Feature | CastOff Status | Notes |
-| :--- | :---: | :--- |
-| **Physical Panel Goes Dark** | ✅ | OLED diodes off / LCD backlight zeroed |
-| **Mirroring / Casting Survives** | ✅ | Proven: 2MB live screencaps composited during screen-off |
-| **Touch Defense** | ✅ | Fullscreen transparent overlay consumes rogue pocket touches |
-| **Wake Gesture** | ✅ | Double-press physical Volume-Up key wakes device in < 150ms |
-| **Notification Shade Politeness** | ✅ | Automatically collapsed with animation buffer before blanking |
-| **Physical Power Button Behavior** | ⚠️ | Must not be pressed while blanked (triggers OS sleep) |
-| **Zero Play Store Bloat** | ✅ | Built strictly with root, reflection, and clean sysfs wrappers |
-| **Samsung R&D Budget Expended** | $0.00 | Built on a Moto G57 Power running Android 16 (Baklava) |
+CastOff is an open-source, community-driven project. Because display HAL implementations, kernel evdev nodes, and Hardware Composers (HWC) vary across device manufacturers and custom ROMs, **your testing reports and bug reports are invaluable!**
+
+- 🧪 **Tested on a different device or ROM?** We would love to know your results!
+- 🐞 **Found a bug, black screen issue, or key mapping quirk?**  
+  Please feel free to **[Open an Issue on GitHub](https://github.com/SreeHz/CastOff/issues)**. When filing a report, please include:
+  1. **Device Model & Chipset** (e.g. Motorola G57 Power, Snapdragon 6 Gen 1)
+  2. **Android Version & ROM** (e.g. Lunaris OS Android 16, LineageOS 21, PixelOS)
+  3. **Display Type** (OLED / AMOLED vs IPS LCD)
+  4. **Log Output**: Run `su -c 'castoff status'` or `su -c 'castoff test 5'`
+  5. **Hardware Keys Output** (if double Volume-Up wake fails): Run `su -c 'getevent -lp'`
+
+Contributions, pull requests, and device compatibility reports are warmly welcomed! 🤝
 
 ---
 
-## 🤝 Credits & Acknowledgments
+## 🤝 Credits & Author
 
-- **[scrcpy](https://github.com/Genymobile/scrcpy)** by Romain Vimont (`@rom1v`): The genius `mod+o` screen-off implementation served as foundational inspiration for the `setDisplayPowerMode` and `DisplayControl` reflection mechanisms.
-- **Motorola Moto G57 Power**: The brave testbed device running Android 16 (Baklava) on LineageOS with Magisk 30.7 that endured countless display blanking experiments.
-- **Author**: Raswanth
+- **Author**: **Sree Raswanth V S** ([@SreeHz](https://github.com/SreeHz))
+- **[scrcpy](https://github.com/Genymobile/scrcpy)** by Romain Vimont (`@rom1v`): Foundational inspiration for the `setDisplayPowerMode` and `DisplayControl` reflection mechanisms.
+- **Motorola Moto G57 Power**: The testbed device running Android 16 (Baklava) with Magisk that endured countless display blanking experiments.
 
 ---
 
 <div align="center">
-  <sub>CastOff is free and open-source software under the MIT License. May your casts be long and your displays stay cold. 📺❄️</sub>
+  <sub>CastOff is free and open-source software under the MIT License. Built with curiosity and passion by Sree Raswanth V S. May your casts be long and your displays stay cold. 📺❄️</sub>
 </div>
