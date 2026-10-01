@@ -81,16 +81,16 @@ fi
 
 # 3. Update Magisk Module Payload
 echo "--> Updating Magisk module files..."
+rm -rf "$PROJECT_DIR/magisk_module/system/app"
 mkdir -p "$PROJECT_DIR/magisk_module/system/framework" \
-         "$PROJECT_DIR/magisk_module/system/bin" \
-         "$PROJECT_DIR/magisk_module/system/app/CastOff"
+         "$PROJECT_DIR/magisk_module/system/bin"
 
 cp -f "$BUILD_DIR/cli/castoff.jar" "$PROJECT_DIR/magisk_module/system/framework/castoff.jar"
 cp -f "$BUILD_DIR/cli/castoff" "$PROJECT_DIR/magisk_module/system/bin/castoff"
-cp -f "$BUILD_DIR/app/CastOff.apk" "$PROJECT_DIR/magisk_module/system/app/CastOff/CastOff.apk"
+cp -f "$BUILD_DIR/app/CastOff.apk" "$PROJECT_DIR/magisk_module/CastOff.apk"
 chmod 755 "$PROJECT_DIR/magisk_module/system/bin/castoff"
 chmod 644 "$PROJECT_DIR/magisk_module/system/framework/castoff.jar"
-chmod 644 "$PROJECT_DIR/magisk_module/system/app/CastOff/CastOff.apk"
+chmod 644 "$PROJECT_DIR/magisk_module/CastOff.apk"
 
 # 4. Package Magisk ZIP
 echo "--> Packaging cast_off_magisk.zip..."

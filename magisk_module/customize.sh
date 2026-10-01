@@ -18,7 +18,8 @@ chmod 644 /data/local/tmp/castoff.jar
 
 # Install APK immediately so user can test before reboot
 ui_print "- Installing CastOff App and Quick Settings Tile..."
-pm install -r -g $MODPATH/system/app/CastOff/CastOff.apk >/dev/null 2>&1
+pm install -r -g $MODPATH/CastOff.apk >/dev/null 2>&1
+rm -f $MODPATH/CastOff.apk
 
 # Configure Magisk root policy and overlay permission
 APP_UID=$(dumpsys package com.castoff 2>/dev/null | grep -iE 'appId|userId' | head -n 1 | grep -o '[0-9]\+')
