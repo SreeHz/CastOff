@@ -20,14 +20,19 @@ import java.io.FileReader;
 
 public class MainActivity extends Activity {
     private static final String STATE_FILE = "/data/local/tmp/castoff.state";
+    private static final String DUAL_STATE_FILE = "/data/local/tmp/castoff_dual.state";
     private TextView tvStatus;
     private Button btnTest;
     private Button btnToggle;
+    private TextView tvDualStatus;
+    private Button btnStartDual;
+    private Button btnStopDual;
 
     private final BroadcastReceiver stateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateStatusUi();
+            updateDualStatusUi();
         }
     };
 
@@ -39,6 +44,9 @@ public class MainActivity extends Activity {
         tvStatus = findViewById(R.id.tv_status);
         btnTest = findViewById(R.id.btn_test);
         btnToggle = findViewById(R.id.btn_toggle);
+        tvDualStatus = findViewById(R.id.tv_dual_status);
+        btnStartDual = findViewById(R.id.btn_start_dual);
+        btnStopDual = findViewById(R.id.btn_stop_dual);
 
         // Check overlay permission if not granted
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
@@ -61,6 +69,26 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 executeRootCommand("castoff toggle");
+            }
+        });
+
+        btnStartDual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(new Intent(MainActivity.this, DualDisplayService.class));
+                } else {
+                    startService(new Intent(MainActivity.this, DualDisplayService.class));
+                }
+                startService(new Intent(MainActivity.this, DisplayControllerOverlay.class));
+            }
+        });
+
+        btnStopDual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService(new Intent(MainActivity.this, DualDisplayService.class));
+                stopService(new Intent(MainActivity.this, DisplayControllerOverlay.class));
             }
         });
 
@@ -90,9 +118,12 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         updateStatusUi();
+        updateDualStatusUi();
         IntentFilter filter = new IntentFilter();
         filter.addAction(CastOffReceiver.ACTION_SCREEN_ON);
         filter.addAction(CastOffReceiver.ACTION_SCREEN_OFF);
+        filter.addAction("com.castoff.ACTION_DUAL_DISPLAY_CONNECTED");
+        filter.addAction("com.castoff.ACTION_DUAL_DISPLAY_DISCONNECTED");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(stateReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
         } else {
@@ -128,6 +159,35 @@ public class MainActivity extends Activity {
             tvStatus.setText("Normal (Display Active)");
             tvStatus.setTextColor(Color.parseColor("#FF4CAF50"));
             btnToggle.setText(getString(R.string.btn_toggle));
+        }
+    }
+
+    private void updateDualStatusUi() {
+        boolean active = false;
+        String statusText = "OFF";
+        try {
+            File f = new File(DUAL_STATE_FILE);
+            if (f.exists()) {
+                BufferedReader br = new BufferedReader(new FileReader(f));
+                String line = br.readLine();
+                br.close();
+                if (line != null && line.contains("Display #")) {
+                    active = true;
+                    statusText = line.trim();
+                }
+            }
+        } catch (Throwable ignored) {}
+
+        if (active) {
+            if (tvDualStatus != null) {
+                tvDualStatus.setText(statusText);
+                tvDualStatus.setTextColor(Color.parseColor("#FF4CAF50"));
+            }
+        } else {
+            if (tvDualStatus != null) {
+                tvDualStatus.setText(getString(R.string.dual_no_display));
+                tvDualStatus.setTextColor(Color.parseColor("#FFFF9800"));
+            }
         }
     }
 

@@ -8,4 +8,18 @@
     <string name="btn_test">Test Screen Blank (5s)</string>
     <string name="btn_toggle">Toggle Blank Now</string>
     <string name="info_instructions">Instructions:\n\n• Tap the "Cast Screen Off" tile in Quick Settings to blank display while casting.\n• Double-press Volume Up anytime to wake the screen.\n• ⚠️ Avoid pressing the physical Power button while blanked to prevent putting the phone to sleep.</string>
+    <string name="dual_display_notification_title">Dual Display Active</string>
+    <string name="dual_display_notification_text">Second screen detected and managed by CastOff.</string>
+    <string name="controller_switch_sc2">Switch to SC2 View</string>
+    <string name="controller_move_app">Move App to TV</string>
+    <string name="controller_blank_phone">Blank Phone (CastOff)</string>
+    <string name="controller_stop_dual">Stop Dual Display</string>
+    <string name="sc2_placeholder_text">SC2 Active</string>
+    <string name="dual_display_title">📺 Dual Display Mode</string>
+    <string name="dual_display_subtitle">Connect to a wireless display and control two independent screens</string>
+    <string name="btn_start_dual">Start Dual Display</string>
+    <string name="btn_stop_dual">Stop Dual Display</string>
+    <string name="dual_no_display">No Wireless Display Detected</string>
+    <string name="dual_active">SC2 Active on Display #</string>
+    <string name="dual_instructions">Instructions for Dual Display:\n\n• Connect to a wireless display via Settings > Connected Devices > Cast.\n• Tap \'Start Dual Display\' to create independent SC2 on your TV.\n• Use the floating controller bubble to move apps to the TV.\n• CastOff blanking (screen off) still works — SC2 stays active.\n• Double-press Volume Up to wake phone without affecting TV.</string>
 </resources>

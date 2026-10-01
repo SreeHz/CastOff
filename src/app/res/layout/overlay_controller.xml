@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#DD222222"
+    android:padding="8dp">
+
+    <!-- The small floating bubble -->
+    <ImageView
+        android:id="@+id/bubble_icon"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_dual_display"
+        android:padding="8dp" />
+
+    <!-- The expandable panel -->
+    <LinearLayout
+        android:id="@+id/panel_container"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="#333333"
+        android:padding="16dp"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btn_switch_sc2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/controller_switch_sc2" />
+
+        <Button
+            android:id="@+id/btn_move_app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/controller_move_app"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btn_blank_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/controller_blank_phone"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btn_stop_dual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/controller_stop_dual"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

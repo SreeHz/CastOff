@@ -42,8 +42,25 @@ public class CastOffCli {
                 case "daemon":
                     runDaemon();
                     break;
+                case "dual-status":
+                    printDualStatus();
+                    break;
+                case "launch-on-sc2":
+                    if (args.length > 1) {
+                        launchOnSc2(args[1]);
+                    } else {
+                        System.out.println("Usage: castoff launch-on-sc2 <package/activity>");
+                    }
+                    break;
+                case "move-to-sc2":
+                    if (args.length > 1) {
+                        moveToSc2(args[1]);
+                    } else {
+                        System.out.println("Usage: castoff move-to-sc2 <package>");
+                    }
+                    break;
                 default:
-                    System.out.println("Usage: castoff [off|on|toggle|status|test [seconds]|daemon]");
+                    System.out.println("Usage: castoff [off|on|toggle|status|test [seconds]|daemon|dual-status|launch-on-sc2|move-to-sc2]");
                     break;
             }
         } catch (Throwable t) {
@@ -362,6 +379,87 @@ public class CastOffCli {
     private static void printStatus() {
         String state = readState();
         System.out.println("CastOff Status: " + state);
+    }
+
+    private static final String DUAL_STATE_FILE = "/data/local/tmp/castoff_dual.state";
+
+    private static void printDualStatus() {
+        try {
+            File f = new File(DUAL_STATE_FILE);
+            if (!f.exists()) {
+                System.out.println("Dual Display: OFF");
+                return;
+            }
+            BufferedReader br = new BufferedReader(new FileReader(f));
+            String line = br.readLine();
+            br.close();
+            System.out.println("Dual Display: " + (line != null ? line.trim() : "OFF"));
+        } catch (Throwable ignored) {
+            System.out.println("Dual Display: OFF");
+        }
+    }
+
+    private static String getSc2DisplayId() {
+        try {
+            File f = new File(DUAL_STATE_FILE);
+            if (!f.exists()) return null;
+            BufferedReader br = new BufferedReader(new FileReader(f));
+            String line = br.readLine();
+            br.close();
+            if (line != null && line.contains("Display #")) {
+                return line.split("Display #")[1].trim();
+            }
+        } catch (Throwable ignored) {}
+        return null;
+    }
+
+    private static void launchOnSc2(String component) {
+        String displayId = getSc2DisplayId();
+        if (displayId == null) {
+            System.out.println("Error: No secondary display active.");
+            return;
+        }
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{
+                "am", "start", "--display", displayId, "-n", component
+            });
+            p.waitFor();
+            System.out.println("Launched " + component + " on display " + displayId);
+        } catch (Throwable t) {
+            System.out.println("Error launching: " + t.getMessage());
+        }
+    }
+
+    private static void moveToSc2(String packageName) {
+        String displayId = getSc2DisplayId();
+        if (displayId == null) {
+            System.out.println("Error: No secondary display active.");
+            return;
+        }
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{
+                "cmd", "package", "resolve-activity", "--brief", packageName
+            });
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            String component = null;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("/")) {
+                    component = line.trim();
+                    break;
+                }
+            }
+            reader.close();
+            p.waitFor();
+
+            if (component != null) {
+                launchOnSc2(component);
+            } else {
+                System.out.println("Error: Could not resolve activity for " + packageName);
+            }
+        } catch (Throwable t) {
+            System.out.println("Error moving: " + t.getMessage());
+        }
     }
 
     private static void testBlank(int seconds) throws Exception {
